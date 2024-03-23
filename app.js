@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors"
 import authRoutes from "./Routes/Auth/Auth.js"
+import userRoutes from "./Routes/user.js"
 
 const app = express()
 
@@ -9,6 +10,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use("/api/user", authRoutes)
+app.use("/api/user", userRoutes)
 
 app.get("/", (req, res) => {
     res.send("APP IS RUNNING")
