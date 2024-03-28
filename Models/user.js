@@ -8,7 +8,7 @@ const userSchema = new Schema({
     isAdmin: { type: Boolean, default: false},
     courses: { type: [String], default: []},
     complaints: { type: [String], default: []},
-    documents: { type: [String], default: []},
+    documents: { type: [Object], default: []},
     createdAt: { type: Date, default: new Date()}
 })
 

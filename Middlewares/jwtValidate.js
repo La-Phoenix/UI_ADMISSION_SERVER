@@ -2,6 +2,11 @@ import jwt from "jsonwebtoken";
 
 const auth = async (req, res, next) => {
   try {
+    if(!req.headers.authorization) {
+      return res
+        .status(400)
+        .json({ message: "Unauthorised! Try signing In or signing Up." });
+    }
     const token = req.headers.authorization.split(" ")[1];
     if (!token)
       return res

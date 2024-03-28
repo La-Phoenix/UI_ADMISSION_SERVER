@@ -1,6 +1,7 @@
 import express from "express";
-import { uploadClearance } from "../Controllers/Clearance.js";
+import { olevelverify, uploadClearance } from "../Controllers/user.js";
 import multer from "multer";
+import auth from "../Middlewares/jwtValidate.js";
 
 
 const storage  = multer.diskStorage({
@@ -18,6 +19,7 @@ const upload = multer({ storage: storage })
 
 const Router = express.Router()
 
-Router.post('/clearance', upload.any(), uploadClearance)
+Router.post('/clearance', auth, upload.any(), uploadClearance)
+Router.post('/olevelverify', auth, upload.any(), olevelverify)
 
 export default Router;
