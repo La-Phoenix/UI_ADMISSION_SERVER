@@ -3,10 +3,10 @@ import jwt from "jsonwebtoken";
 import User from "../Models/user.js";
 
 export const signUp = async (req, res) => {
-    const {email, password} = await req.body;
-    if(!email && !password){
+    const {email, password, name, isAdmin, matric_no} = req.body;
+    if(!email && !password && !name, !matric_no){
         return res.status(400).json({
-            message: "Email and Password Field must be filled."
+            message: "'name', 'email', 'matric_no' and 'password' Field must be provided."
         })
     }
     try {
@@ -19,9 +19,11 @@ export const signUp = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 12);
 
         const result = await User.create({
+            name,
             email,
+            matric_no,
             password: hashedPassword,
-            isAdmin: email === "admin@gmail.com"? true : false,
+            isAdmin: isAdmin? true : false,
         })
 
         const token = jwt.sign(
@@ -47,7 +49,7 @@ export const signIn = async (req, res) => {
     const {email, password } = req.body;
     if(!email && !password){
         return res.status(400).json({
-            message: "Email and Password Field must be filled."
+            message: "Email and Password Field must be provided."
         })
     }
     try {
@@ -68,7 +70,7 @@ export const signIn = async (req, res) => {
                 },
                 process.env.JWTSECRET,
                 {
-                  expiresIn: "72h",
+                  expiresIn: "1h",
                 }
             );
             return res.status(200).json({
@@ -81,5 +83,15 @@ export const signIn = async (req, res) => {
         }
     } catch (error) {
         return res.status(500).json({ message: "Something went wrong." });
+    }
+}
+
+
+export const getAllUsers = async (req, res) => {
+    try {
+        const allUsers = await User.find({});
+        return res.status(200).json({users: allUsers})
+    } catch (error) {
+        return res.status(500).json({ message: "Something went wrong. Please try again later..." });
     }
 }
